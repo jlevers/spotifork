@@ -1,0 +1,30 @@
+{
+  "name": "spotifork",
+  "version": "1.0.0",
+  "description": "Allows you to fork and merge Spotify playlists.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "forms": "^1.1.4",
+    "spotify-web-api-node": "^2.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node lib/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheAtomicGoose/spotifork.git"
+  },
+  "keywords": [
+    "spotify",
+    "fork",
+    "merge"
+  ],
+  "author": "Jesse Evers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheAtomicGoose/spotifork/issues"
+  },
+  "homepage": "https://github.com/TheAtomicGoose/spotifork#readme"
+}
