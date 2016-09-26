@@ -4,8 +4,10 @@
   "description": "Allows you to fork and merge Spotify playlists.",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
-    "forms": "^1.1.4",
+    "request": "^2.74.0",
     "spotify-web-api-node": "^2.3.5"
   },
   "devDependencies": {},

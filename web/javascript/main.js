@@ -1,12 +1,19 @@
 $(document).ready(function() {
-    console.log('test');
-    $('[id^="form-"]:not(#form-action)').hide();
-    $('#form-' + selected).show();
-    $('#form-action').change(function() {
-        var oldSelected = selected;
-        selected = $('#form-action').val();
+    // If the form data cookies are set 
+    /*if ($.cookie('action') && $.cookie('playlistID') && $.cookie('owner')) {
 
-        $('#form-' + oldSelected).hide();
-        $('#form-' + selected).show();
-    });
+        // Fill the form fields with the cookie values
+        $('#actions').val($.cookie('action'));
+        $('#action').val($.cookie('action'));
+        $('#playlistID').val($.cookie('playlistID'));
+        $('#owner').val($.cookie('owner'));
+
+        // Resubmit the form
+        $('#form-fork').submit(function(event) {
+            // Remove cookies
+            $.removeCookie('action');
+            $.removeCookie('playlistID');
+            $.removeCookie('owner');
+        });
+    }*/
 });
