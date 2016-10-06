@@ -5,7 +5,7 @@ var path         = require('path');
 var bodyParser   = require('body-parser');
 var cookieParser = require('cookie-parser');
 var request      = require('request');
-var spotifork    = require('./spotifork.js'),
+var spotifork    = require('./lib/spotifork.js'),
     spotifyApi   = spotifork.spotifyApi;
 
 // Define scopes
@@ -19,13 +19,15 @@ var port = process.env.PORT || 8888;
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.static(__dirname + '/web'));
+
 app.get('/', function(req, res) {
 
-    res.sendFile(path.join(__dirname, '../web', 'index.html'));
+    res.sendFile('/index.html');
 
     // If the user has entered info into the form, and then authorized and returned
     // to the form, automatically resubmit the form
-    if (req.cookies.action) {
+    if (req.cookies.spotifork) {
         var postObject = {};
 
         if (req.cookies.action === 'fork') {
@@ -62,20 +64,24 @@ app.get('/callback/', function(req, res) {
 });
 
 app.get('/success/', function(req, res) {
-    res.sendFile(path.join(__dirname, '../web', 'success.html'));
+    res.sendFile('/success.html');
 })
 
 // When the main fork/merge form is submitted
 app.post('/', function(req, res) {
     var authorizeURL = spotifyApi.createAuthorizeURL(scopes, 'test');
 
-    console.log(req.body);
-
     if (spotifyApi._credentials.accessToken === undefined) {
+        var spotiforkData = {
+            action: req.body.action,
+            playlists: []
+        }
+        for (var i = 1; i < req.body.length; i += 2) {
+            spotiforkData[playlists].push([req.body[i], req.body[i + 1]]);
+            console.log([req.body[i], req.body[i + 1]]);
+        }
         // Set cookies
-        res.cookie('action', req.body.action);
-        res.cookie('playlistID', req.body.playlistID);
-        res.cookie('owner', req.body.owner);
+        res.cookie('spotifork', spotiforkData);
         res.redirect(authorizeURL);
     } else {
 
@@ -88,6 +94,7 @@ app.post('/', function(req, res) {
                 if (req.body.action === 'fork') {
                     spotifork.fork(req.body.playlistID, req.body.owner, userInfo.id);
                 } else if (req.body.action === 'merge') {
+                    console.log(req.body);
                 } else {
                     console.log('action: ' + req.body.action);
                 }
