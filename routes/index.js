@@ -2,7 +2,6 @@ var express = require('express');
 var spotifork = require('../lib/spotifork'),
     spotifyApi = spotifork.spotifyApi;
 var creds = require('../lib/creds');
-var jade = require('../views/data');
 var router = express.Router();
 
 /* GET home page. */
@@ -30,6 +29,8 @@ router.post('/', function(req, res) {
             // Fork or merge playlist
             if (req.body.action === 'fork') {
                 spotifork.fork(req.body.playlistID, req.body.owner, userInfo.id);
+            } else if (req.body.action === 'merge') {
+                spotifork.merge(req.body.playlistID, req.body.owner, userInfo.id);
             }
         });
 
