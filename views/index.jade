@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  label(for='actions')
+    strong Actions &nbsp;
+  select(name='actions')#actions
+    each action, i in actions
+      option(value=i) #{action}
+  br
+  br
+
+  form(action='/', name='action', method='post')#form-fork
+    input(type='hidden', name='action', value='fork')
+    div.playlist
+      label(for='playlistID') Playlist ID &nbsp;
+      input(type='text' name='playlistID')#playlistID
+      br
+      label(for='owner') Owner &nbsp;
+      input(type='text', name='owner')#owner
+      br
+      input(type='submit', value='Fork')
+
+  form(action='/', name='action', method='post')#form-merge
+    input(type='hidden', name='action', value='merge')
+    div#playlists
+      div.playlist
+        label(for='playlistID') Playlist ID &nbsp;
+        input(type='text' name='playlistID')#playlistID
+        br
+        label(for='owner') Owner &nbsp;
+        input(type='text', name='owner')#owner
+        br
+      div.playlist
+        label(for='playlistID') Playlist ID &nbsp;
+        input(type='text' name='playlistID')#playlistID
+        br
+        label(for='owner') Owner &nbsp;
+        input(type='text', name='owner')#owner
+        br
+    input(type='button', value='Add Playlist')#addPlaylist
+    input(type='button', value='Remove Playlist')#removePlaylist
+    input(type='submit', value='Merge')
