@@ -19,38 +19,16 @@ var port = process.env.PORT || 8888;
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(__dirname + '/web'));
+//app.use(express.static(__dirname + '/web'));
 
 app.get('/', function(req, res) {
 
-    res.sendFile('/index.html');
-
-    // If the user has entered info into the form, and then authorized and returned
-    // to the form, automatically resubmit the form
-    if (req.cookies.spotifork) {
-        var postObject = {};
-
-        if (req.cookies.action === 'fork') {
-
-            request.post({
-                url: 'http://localhost:8888',
-                json: {
-                    action: req.cookies.action,
-                    playlistID: req.cookies.playlistID,
-                    owner: req.cookies.owner
-                }
-            }, function (err, res, body) {
-
-            });
-
-            // Get rid of cookies
-            res.clearCookie('action');
-            res.clearCookie('playlistID');
-            res.clearCookie('owner');
-        } else {
-
-        }
-
+    if (spotifyApi._credentials.accessToken === undefined) {
+        console.log('authorize');
+        var authorizeURL = spotifyApi.createAuthorizeURL(scopes, 'test');
+        res.redirect(authorizeURL);
+    } else {
+        res.sendFile(path.join(__dirname, 'web', 'index.html'));
     }
 
 });
@@ -63,48 +41,32 @@ app.get('/callback/', function(req, res) {
     });
 });
 
-app.get('/success/', function(req, res) {
+app.get('/success', function(req, res) {
     res.sendFile('/success.html');
-})
+});
 
 // When the main fork/merge form is submitted
 app.post('/', function(req, res) {
-    var authorizeURL = spotifyApi.createAuthorizeURL(scopes, 'test');
 
-    if (spotifyApi._credentials.accessToken === undefined) {
-        var spotiforkData = {
-            action: req.body.action,
-            playlists: []
-        }
-        for (var i = 1; i < req.body.length; i += 2) {
-            spotiforkData[playlists].push([req.body[i], req.body[i + 1]]);
-            console.log([req.body[i], req.body[i + 1]]);
-        }
-        // Set cookies
-        res.cookie('spotifork', spotiforkData);
-        res.redirect(authorizeURL);
-    } else {
+    // Get info about user
+    var retrieveUserInfo = spotifyApi.getMe()
+        .then(function(data) {
+            var userInfo = data.body;
 
-        // Get info about user
-        var retrieveUserInfo = spotifyApi.getMe()
-            .then(function(data) {
-                var userInfo = data.body;
+            // Fork or merge playlist
+            if (req.body.action === 'fork') {
+                spotifork.fork(req.body.playlistID, req.body.owner, userInfo.id);
+            } else if (req.body.action === 'merge') {
 
-                // Fork or merge playlist
-                if (req.body.action === 'fork') {
-                    spotifork.fork(req.body.playlistID, req.body.owner, userInfo.id);
-                } else if (req.body.action === 'merge') {
-                    console.log(req.body);
-                } else {
-                    console.log('action: ' + req.body.action);
-                }
+            } else {
+                console.log('action: ' + req.body.action);
+            }
 
-            }, function(err) {
-                console.log('There was an error getting user information: ' + err);
-            });
+        }, function(err) {
+            console.log('There was an error getting user information: ' + err);
+        });
 
-        res.redirect('/success?action=' + req.body.action);
-    }
+    res.redirect('/success?action=' + req.body.action);
 });
 
 // Makes the app listen on port 8888
