@@ -1,43 +1,46 @@
 extends layout
 
 block content
-  label(for='actions')
-    strong Actions &nbsp;
-  select(name='actions')#actions
-    each action, i in actions
-      option(value=i) #{action}
-  br
-  br
+  div.col-md-4.text-center
+    h1 Spotifork
+    br
+    br
+    button(type='button', name='fork')#fork.btn.btn-xlg.active Fork
+    button(type='button', name='merge')#merge.btn.btn-xlg Merge
+    br
+    br
 
-  form(action='/', name='action', method='post')#form-fork
-    input(type='hidden', name='action', value='fork')
-    div.playlist
-      label(for='playlistID') Playlist ID &nbsp;
-      input(type='text' name='playlistID')#playlistID
-      br
-      label(for='owner') Owner &nbsp;
-      input(type='text', name='owner')#owner
-      br
-      input(type='submit', value='Fork')
+    div.form-group
+      form(action='/', name='action', method='post')#form-fork
+        input(type='hidden', name='action', value='fork')
+        div.playlist
+          input(type='hidden', name='playlist', value='')
+          input(type='hidden', name='owner', value='')
+          label(for='playlistID') Playlist ID
+          input(autocomplete='off', type='text', name='playlistID').form-control.pl-input
+          ul.pred
+          br
+          input(type='submit', value='Fork').btn.btn-md.btn-primary
 
-  form(action='/', name='action', method='post')#form-merge
-    input(type='hidden', name='action', value='merge')
-    div#playlists
-      div.playlist
-        label(for='playlistID') Playlist ID &nbsp;
-        input(type='text' name='playlistID')#playlistID
-        br
-        label(for='owner') Owner &nbsp;
-        input(type='text', name='owner')#owner
-        br
-      div.playlist
-        label(for='playlistID') Playlist ID &nbsp;
-        input(type='text' name='playlistID')#playlistID
-        br
-        label(for='owner') Owner &nbsp;
-        input(type='text', name='owner')#owner
-        br
-        br
-    input(type='button', value='Add Playlist')#addPlaylist
-    input(type='button', value='Remove Playlist')#removePlaylist
-    input(type='submit', value='Merge')
+    div.form-group
+      form(action='/', name='action', method='post')#form-merge
+        input(type='hidden', name='action', value='merge')
+        div#playlists
+          div.playlist
+            input(type='hidden', name='playlist', value='')
+            input(type='hidden', name='owner', value='')
+            label(for='playlistID') Playlist ID
+            input(autocomplete='off', type='text' name='playlistID').form-control.pl-input
+            ul.pred
+            br
+          div.playlist
+            input(type='hidden', name='playlist', value='')
+            input(type='hidden', name='owner', value='')
+            label(for='playlistID') Playlist ID
+            input(autocomplete='off', type='text' name='playlistID').form-control.pl-input
+            ul.pred
+            br
+            br
+        input(type='button', value='Add Playlist')#addPlaylist.btn.btn-md
+        input(type='button', value='Remove Playlist')#removePlaylist.btn.btn-md
+        input(type='submit', value='Merge').btn.btn-md.btn-primary

@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
         var authorizeUrl = spotifyApi.createAuthorizeURL(creds.scopes, 'test');
         res.redirect(authorizeUrl);
     } else {
-        res.render('index', {title: 'Spotifork', actions: ['Fork', 'Merge']});
+        res.render('index', {title: 'Spotifork'});
     }
 });
 
@@ -22,15 +22,16 @@ router.get('/callback/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+    console.log(req.body);
     var retrieveUserInfo = spotifyApi.getMe()
         .then(function(data) {
             var userInfo = data.body;
 
             // Fork or merge playlist
             if (req.body.action === 'fork') {
-                spotifork.fork(req.body.playlistID, req.body.owner, userInfo.id);
+                spotifork.fork(req.body.playlist, req.body.owner, userInfo.id);
             } else if (req.body.action === 'merge') {
-                spotifork.merge(req.body.playlistID, req.body.owner, userInfo.id);
+                spotifork.merge(req.body.playlist, req.body.owner, userInfo.id);
             }
         });
 
@@ -38,8 +39,13 @@ router.post('/', function(req, res) {
 });
 
 router.get('/success/', function(req, res) {
-    console.log(req.body.action);
     res.render('success', {action: req.query.action});
+});
+
+router.post('/predict/', function(req, res) {
+    spotifork.getPredictions(req.body.input, function(data) {
+        res.send(data);
+    });
 });
 
 module.exports = router;

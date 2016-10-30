@@ -1,6 +1,6 @@
 {
     "clientId": "e29b39e6fbaa4687b6e724c0f016b575",
     "clientSecret": "ec66ec77a988428d854b516d33e07d6e",
-    "redirectUri": "https://spotifork.herokuapp.com/callback/",
+    "redirectUri": "http://localhost:8888/callback/",
     "scopes": ["playlist-modify-private", "playlist-modify-public"]
 }
