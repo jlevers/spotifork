@@ -1,0 +1,6 @@
+{
+    "clientId": "<spotify application ID>",
+    "clientSecret": "<spotify application secret>",
+    "redirectUri": "http://localhost:8888/callback/",
+    "scopes": ["playlist-modify-private", "playlist-modify-public"]
+}
