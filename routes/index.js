@@ -22,28 +22,48 @@ router.get('/callback/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-    console.log(req.body);
     var retrieveUserInfo = spotifyApi.getMe()
         .then(function(data) {
             var userInfo = data.body;
 
             // Fork or merge playlist
             if (req.body.action === 'fork') {
-                spotifork.fork(req.body.playlist, req.body.owner, userInfo.id);
+                spotifork.fork(req.body.playlist, req.body.owner, userInfo.id, null, function(err) {
+                    if (err) {
+                        res.redirect('/error?err=' + err.message);
+                    } else {
+                        res.redirect('/success?action=' + req.body.action);
+                    }
+                });
             } else if (req.body.action === 'merge') {
-                spotifork.merge(req.body.playlist, req.body.owner, userInfo.id);
+                console.log(req.body);
+                spotifork.merge(req.body.playlist, req.body.owner, userInfo.id, null, function(err) {
+                    if (err) {
+                        res.redirect('/error?err=' + err.message);
+                    } else {
+                        res.redirect('/success?action=' + req.body.action);
+                    }
+                });
             }
-        });
 
-        res.redirect('/success?action=' + req.body.action);
+        });
 });
 
 router.get('/success/', function(req, res) {
     res.render('success', {action: req.query.action});
 });
 
+router.get('/error/', function(req, res) {
+    res.render('error', {
+        message: req.query.err,
+        error: {
+            status: 500
+        }
+    });
+});
+
 router.post('/predict/', function(req, res) {
-    spotifork.getPredictions(req.body.input, function(data) {
+    spotifork.getPredictions(req.body.name, req.body.author, function(data) {
         res.send(data);
     });
 });

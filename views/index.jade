@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  div.col-md-4
   div.col-md-4.text-center
     h1 Spotifork
     br
@@ -11,7 +12,7 @@ block content
     br
 
     div.form-group
-      form(action='/', name='action', method='post')#form-fork
+      form(action='/', name='action', method='post')#form-fork.action-form
         input(type='hidden', name='action', value='fork')
         div.playlist
           input(type='hidden', name='playlist', value='')
@@ -23,7 +24,7 @@ block content
           input(type='submit', value='Fork').btn.btn-md.btn-primary
 
     div.form-group
-      form(action='/', name='action', method='post')#form-merge
+      form(action='/', name='action', method='post')#form-merge.action-form
         input(type='hidden', name='action', value='merge')
         div#playlists
           div.playlist
