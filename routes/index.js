@@ -1,7 +1,8 @@
 var express = require('express');
-var spotifork = require('../lib/spotifork'),
-    spotifyApi = spotifork.spotifyApi;
 var creds = require('../lib/creds');
+var Spotifork = require('../lib/spotifork');
+var spotifork = new Spotifork(creds.clientId, creds.clientSecret, creds.redirectUri),
+    spotifyApi = spotifork.spotifyApi;
 var router = express.Router();
 
 /* GET home page. */
