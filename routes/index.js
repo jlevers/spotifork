@@ -37,7 +37,6 @@ router.post('/', function(req, res) {
                     }
                 });
             } else if (req.body.action === 'merge') {
-                console.log(req.body);
                 spotifork.merge(req.body.playlist, req.body.owner, userInfo.id, null, function(err) {
                     if (err) {
                         res.redirect('/error?err=' + err.message);
