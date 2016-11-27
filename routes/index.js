@@ -83,4 +83,11 @@ router.post('/predict/', function(req, res) {
     }
 });
 
+/*
+router.post('/logout/', function(req, res) {
+    res.clearCookie('accessToken');
+    res.redirect('/');
+});
+*/
+
 module.exports = router;
