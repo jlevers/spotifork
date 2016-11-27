@@ -1,13 +1,13 @@
 var express = require('express');
 var creds = require('../lib/creds');
 var Spotifork = require('../lib/spotifork');
-var spotifork = new Spotifork(creds.clientId, creds.clientSecret, creds.redirectUri),
-    spotifyApi = spotifork.spotifyApi;
+var SpotifyWebApi = require('spotify-web-api-node');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    if (spotifyApi._credentials.accessToken === undefined) {
+    if (req.cookies.accessToken === undefined) {
+        var spotifyApi = new Spotifork().spotifyApi;
         var authorizeUrl = spotifyApi.createAuthorizeURL(creds.scopes, 'test');
         res.redirect(authorizeUrl);
     } else {
@@ -16,13 +16,22 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/callback/', function(req, res) {
+    var spotifork = new Spotifork();
     // Grant authorization tokens and redirect to original form
-    spotifork.grantAuthCode(req.query.code, function() {
-        res.redirect('/');
+    spotifork.grantAuthCode(req.query.code, function(err) {
+        if(err) {
+            res.redirect('/error?err=' + err.message);
+        } else {
+            res.cookie('accessToken', spotifork.spotifyApi._credentials.accessToken, {maxAge: 360000});
+            res.redirect('/');
+        }
     });
 });
 
 router.post('/', function(req, res) {
+    var spotifork = new Spotifork();
+    spotifork.spotifyApi._credentials.accessToken = req.cookies.accessToken;
+    var spotifyApi = spotifork.spotifyApi;
     var retrieveUserInfo = spotifyApi.getMe()
         .then(function(data) {
             var userInfo = data.body;
@@ -63,9 +72,15 @@ router.get('/error/', function(req, res) {
 });
 
 router.post('/predict/', function(req, res) {
+    var spotifork = new Spotifork();
+    spotifork.spotifyApi._credentials.accessToken = req.cookies.accessToken;
+    try {
     spotifork.getPredictions(req.body.name, req.body.author, function(data) {
         res.send(data);
     });
+    } catch(e) {
+        console.log(e);
+    }
 });
 
 module.exports = router;

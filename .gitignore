@@ -1,3 +1,4 @@
 node_modules/
 ./.tern_project
 ./lib/creds.json
+npm-debug.log
