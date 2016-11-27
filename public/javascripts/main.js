@@ -44,7 +44,7 @@ $(document).ready(function() {
                     author: author
                 }, 
                 function(data) {
-                    if (data.matches) {
+                    if (data.matches.length > 0) {
                         data.matches.forEach(function(playlist) {
                             var userName = data.display_name;
 
@@ -58,9 +58,9 @@ $(document).ready(function() {
 
                             $(':focus').next().append(pred);
                         });
+                        $(':focus').next().css('display', 'block');
                     }
 
-                    $(':focus').next().css('display', 'block');
                 });
         } else {
             $(':focus').next().css('display', 'none');
@@ -70,18 +70,6 @@ $(document).ready(function() {
     // Make sure that the hidden playlist ID and owner fields are filled on submission
     $('.action-form').submit(function(event) {
         var playlists = $(event.target).find('.playlist');
-        console.log($(playlists[0]));
-        // playlists.forEach(function(playlist) {
-        //     playlist = $(playlist);
-        //     var inputName = playlist.find('input[name="playlist"]');
-        //     var inputAuthor = playlist.find('input[name="owner"]');
-        //     if (inputName.val() === '' || inputAuthor.val() === '') {
-        //         var input = playlist.find('.pl-input').val().split(', ');
-        //         var name = input[0], author = input[1];
-        //         inputName.val(name);
-        //         inputAuthor.val(author);
-        //     }
-        // });
 
         for (var i = 0; i < playlists.length; i++) {
             playlist = $(playlists[i]);
