@@ -1,7 +1,7 @@
 Spotifork
 =========
 
-Spotifork interfaces with the Spotify API, and makes it possible to copy other users' playlists to your own Spotify account, so that you can edit them. It also allows you to merge multiple other playlists into a single playlist on your account. It's still a work in progress.
+Spotifork interfaces with the Spotify API, and makes it possible to copy other users' playlists to your own Spotify account, so that you can edit them. It also allows you to merge multiple other playlists into a single playlist on your account. You can use Spotifork at [spotifork.com](https://spotifork.com)!
 
 Installation
 -----
