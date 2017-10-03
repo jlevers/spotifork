@@ -17,7 +17,11 @@
     "fast-levenshtein": "^2.0.5",
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
+    "node": "^8.3.0",
     "serve-favicon": "~2.3.0",
     "spotify-web-api-node": "^2.3.6"
+  },
+  "devDependencies": {
+    "eslint-config-google": "^0.9.1"
   }
 }
