@@ -6,7 +6,7 @@ $(document).ready(function() {
         $(this).addClass('active');
         $('#merge').removeClass('active', 100);
     });
-    
+
     // Show merge form
     $('#merge').click(function() {
         $('#form-merge').css('display', 'block');
@@ -25,46 +25,45 @@ $(document).ready(function() {
         $('#form-merge #playlists div.playlist:last').remove();
     });
 
-    // 250ms since the last input event fired, call the prediction function.
+    // 450ms since the last input event fired, call the prediction function.
     // Look up debounce vs. throttle, and see header of ./jquery-throttle-debounce.min.js
-    $('.playlist input').on('input', $.debounce(350, function() {
-        // If the field contains a comma (aka contains a playlist in the form "Name, Author")
-        if ($(':focus').val().indexOf(',') > -1) {
+    $('.playlist input').on('input', $.debounce(450, function() {
 
-            // Get playlist field value
-            $(':focus').next().empty();
-            // Split it into name and author
-            var input = $(':focus').val().split(', ');
-            var name = input[0], author = input[1];
-
-            // Ajax call to get predictions using jQuery Ajax
-            $.post('/predict/', 
-                {
-                    name: name, 
-                    author: author
-                }, 
-                function(data) {
-                    if (data.matches.length > 0) {
-                        data.matches.forEach(function(playlist) {
-                            var userName = data.display_name;
-
-                            // Preventing errors on users who don't have display names,
-                            // usually from users who didn't use Facebook to create their Spotify account
-                            if (userName === undefined) {
-                                userName = playlist.owner.id;
-                            }
-                            var pred = '<li data-id="' + playlist.id + '" data-owner="' + playlist.owner.id
-                                + '">' + playlist.name + ', ' + userName + '</li>';
-
-                            $(':focus').next().append(pred);
-                        });
-                        $(':focus').next().css('display', 'block');
-                    }
-
-                });
-        } else {
-            $(':focus').next().css('display', 'none');
+        // Get playlist field value
+        $(':focus').next().empty();
+        // Split it into name and author
+        var input = $(':focus').val().split(', ');
+        var name = input[0];
+        var author = '';
+        if (input.length > 1) {
+            author = input[1];
         }
+
+        // Ajax call to get predictions using jQuery Ajax
+        $.post('/predict/',
+            {
+                name: name,
+                author: author
+            },
+            function(data) {
+                if (data.matches.length > 0) {
+                    data.matches.forEach(function(playlist) {
+                        var userName = playlist.owner.display_name;
+
+                        // Preventing errors on users who don't have display names,
+                        // usually from users who didn't use Facebook to create their Spotify account
+                        if (userName === undefined) {
+                            userName = playlist.owner.id;
+                        }
+                        var pred = '<li data-id="' + playlist.id + '" data-owner="' + playlist.owner.id
+                            + '">' + playlist.name + ', ' + userName + '</li>';
+
+                        $(':focus').next().append(pred);
+                    });
+                    $(':focus').next().css('display', 'block');
+                }
+
+            });
     }));
 
     // Make sure that the hidden playlist ID and owner fields are filled on submission
