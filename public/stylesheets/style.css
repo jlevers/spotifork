@@ -29,7 +29,8 @@ a {
 }
 
 .pl-input {
-    font-size: 20px;
+    font-size: 25px;
+    height: 2em;
 }
 
 .btn-xlg {
@@ -43,10 +44,18 @@ a {
 
 .pred {
     display: none;
-    padding-top: 5px;
+    position: relative;
+    margin-top: 5px;
     margin-bottom: 10px;
     z-index: 10000;
     padding-left: 0;
+    height: auto;
+    max-height: 16em;
+    transition:max-height 0.3s ease-out;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border: 2px solid #ccc;
+    border-radius: 4px;
 }
 
 .pred li {
@@ -54,23 +63,15 @@ a {
     list-style: none;
     text-align: left;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-top: none;
+    /* border: 1px solid #ccc; */
+    border-top: 1px solid #ccc;
     padding: 5px;
     padding-left: 10px;
     cursor: pointer;
 }
 
 .pred li:first-child {
-    border-top: 1px solid #ccc;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.pred li:last-child {
-    border-bottom: 1px solid #ccc;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-top: none;
 }
 
 .pred li:hover {
@@ -79,4 +80,10 @@ a {
 
 .pred li:active {
     background-color: #ccc;
+}
+
+/* Keep scrollbar visible */
+.ps > .ps__scrollbar-x-rail,
+.ps > .ps__scrollbar-y-rail {
+  opacity: 0.6;
 }

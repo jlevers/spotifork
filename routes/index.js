@@ -71,16 +71,16 @@ router.get('/error/', function(req, res) {
     });
 });
 
-router.post('/predict/', function(req, res) {
+router.post('/predict/', function(req, res, next) {
     var spotifork = new Spotifork();
     spotifork.spotifyApi._credentials.accessToken = req.cookies.accessToken;
-    try {
-    spotifork.getPredictions(req.body.name, req.body.author, function(data) {
-        res.send(data);
+    spotifork.getPredictions(req.body.name, req.body.author, req.body.offset, function(err, data) {
+        if (err) {
+            return res.redirect('/error?err=' + err.message);
+        } else {
+            return res.send(data);
+        }
     });
-    } catch(e) {
-        console.log(e);
-    }
 });
 
 /*
